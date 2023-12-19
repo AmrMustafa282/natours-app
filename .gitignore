@@ -1,6 +1,2 @@
 node_modules/
 *.env
-public
-views
-routes/viewRoutes.js
-controllers/viewController.js
