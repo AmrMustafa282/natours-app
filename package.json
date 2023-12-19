@@ -10,8 +10,7 @@
     "debug": "ndb server.js",
     "delete": "node ./dev-data/data/import-dev-data.js --delete",
     "import": "node ./dev-data/data/import-dev-data.js --import",
-    "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js",
-    "build:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
+    "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
   },
   "author": "",
   "license": "ISC",
