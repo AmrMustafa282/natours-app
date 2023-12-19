@@ -28,7 +28,7 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 //Global Middleware
-// app.use(cors())
+app.use(cors())
 app.use(express.static(path.join(__dirname, 'public'))); // Serving static files
 // 1) set Security HTTP headers
 
