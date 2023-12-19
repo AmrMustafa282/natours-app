@@ -2,15 +2,14 @@
   "name": "starter",
   "version": "1.0.0",
   "description": "learning node, express, mongoDB",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
+    "start": "node index.js",
+    "dev": "node index.js",
     "prod": "set NODE_ENV=production&& nodemon server.js",
     "debug": "ndb server.js",
     "delete": "node ./dev-data/data/import-dev-data.js --delete",
-    "import": "node ./dev-data/data/import-dev-data.js --import",
-    "watch:js": "parcel watch ./public/js/index.js --out-dir ./public/js --out-file bundle.js"
+    "import": "node ./dev-data/data/import-dev-data.js --import"
   },
   "author": "",
   "license": "ISC",
