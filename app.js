@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public'))); // Serving static files
 // 1) set Security HTTP headers
 
 // our app.use take a function not a call of function but this call will return a function
-app.use(helmet());
+ app.use(helmet());
 
 
 
