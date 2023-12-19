@@ -9,6 +9,7 @@ const hpp = require('hpp');
 const dotenv = require('dotenv');
 const compression = require('compression')
 dotenv.config({ path: './config.env' });
+const cors = require('cors')
 
 // const AppError = require('./utils/appError');
 const errorController = require('./controllers/errorController');
@@ -27,6 +28,7 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 //Global Middleware
+app.use(cors())
 app.use(express.static(path.join(__dirname, 'public'))); // Serving static files
 // 1) set Security HTTP headers
 
