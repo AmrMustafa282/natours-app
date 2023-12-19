@@ -146,12 +146,12 @@ tourSchema.pre('save', function (next) {
   next();
 });
 
-tourSchema.pre('save', function (next) {
-  // console.log('------------------');
-  // console.log(this);
-  // console.log('------------------');
-  next();
-});
+// tourSchema.pre('save', function (next) {
+//   // console.log('------------------');
+//   // console.log(this);
+//   // console.log('------------------');
+//   next();
+// });
 
 tourSchema.post('save', function (doc, next) {
   // console.log(doc); // doc the document that is just saved
@@ -168,16 +168,16 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 
-tourSchema.post(/^find/, function (docs, next) { // docs can be accessed in post query middleware only
-  // console.log('-----------------------------------------------');
-  // console.log(docs) // docs point to an Array that contains all the docs
-  // console.log('-----------------------------------------------');
-  // console.log(this); // this point to the current query
-  // console.log('-----------------------------------------------');
-  // this.find({ secretTour: { $ne: true } });
-  // console.log(Date.now() - this.start);
-  next();
-});
+// tourSchema.post(/^find/, function (docs, next) { // docs can be accessed in post query middleware only
+//   // console.log('-----------------------------------------------');
+//   // console.log(docs) // docs point to an Array that contains all the docs
+//   // console.log('-----------------------------------------------');
+//   // console.log(this); // this point to the current query
+//   // console.log('-----------------------------------------------');
+//   // this.find({ secretTour: { $ne: true } });
+//   // console.log(Date.now() - this.start);
+//   next();
+// });
 
 // filling refreced data [User]
 tourSchema.pre(/^find/, function(next) {

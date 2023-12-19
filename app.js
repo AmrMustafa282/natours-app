@@ -7,6 +7,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const dotenv = require('dotenv');
+const compression = require('compression')
 dotenv.config({ path: './config.env' });
 
 // const AppError = require('./utils/appError');
@@ -31,71 +32,7 @@ app.use(express.static(path.join(__dirname, 'public'))); // Serving static files
 
 // our app.use take a function not a call of function but this call will return a function
 app.use(helmet());
-// csp.extend(app, {
-//   policy: {
-//     directives: {
-//       'default-src': ['self'],
-//       'style-src': ['self', 'unsafe-inline', 'https:'],
-//       'font-src': ['self', 'https://fonts.gstatic.com'],
-//       'script-src': [
-//         'self',
-//         'unsafe-inline',
-//         'data',
-//         'blob',
-//         'https://js.stripe.com',
-//         'https://*.mapbox.com',
-//         'https://*.cloudflare.com/',
-//         // 'https://bundle.js:8828',
-//         'ws://localhost:56558/',
-//       ],
-//       'worker-src': [
-//         'self',
-//         'unsafe-inline',
-//         'data:',
-//         'blob:',
-//         'https://*.stripe.com',
-//         'https://*.mapbox.com',
-//         'https://*.cloudflare.com/',
-//         // 'https://bundle.js:*',
-//         'ws://localhost:*/',
-//       ],
-//       'frame-src': [
-//         'self',
-//         'unsafe-inline',
-//         'data:',
-//         'blob:',
-//         'https://*.stripe.com',
-//         'https://*.mapbox.com',
-//         'https://*.cloudflare.com/',
-//         // 'https://bundle.js:*',
-//         'ws://localhost:*/',
-//       ],
-//       'img-src': [
-//         'self',
-//         'unsafe-inline',
-//         'data:',
-//         'blob:',
-//         'https://*.stripe.com',
-//         'https://*.mapbox.com',
-//         'https://*.cloudflare.com/',
-//         // 'https://bundle.js:*',
-//         'ws://localhost:*/',
-//       ],
-//       'connect-src': [
-//         'self',
-//         'unsafe-inline',
-//         'data:',
-//         'blob:',
-//         // 'wss://<HEROKU-SUBDOMAIN>.herokuapp.com:<PORT>/',
-//         'https://*.stripe.com',
-//         'https://*.mapbox.com',
-//         'https://*.cloudflare.com/',
-//         // 'https://bundle.js:*',
-//         'ws://localhost:*/',
-//       ],
-//     },
-//   },
-// });
+
 
 
 
@@ -146,6 +83,8 @@ app.use((req, res, next) => {
   // console.log(req.headers)
   next();
 });
+
+app.use(compression)
 
 // DEVELOPMENT logging
 // 3rd party Middleware for debuging
