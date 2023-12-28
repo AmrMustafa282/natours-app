@@ -24,12 +24,18 @@ const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
 app.enable('trust proxy');
+app.use(cors()) // cross origin resource sharing [allow everyone]
+// app.use(cors({origin:'https://www.natours.com'})) [only allow usin this domain]
+// simple reqs => get , post
+// non simple reqs => put patch delete or reqs that has cookies
+app.options('*', cors()); 
+// app.options('api/v1/tours/:id', cors()); // and again we can allow this non-simpeo for spacific route
+
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 //Global Middleware
-app.use(cors())
 app.use(express.static(path.join(__dirname, 'public'))); // Serving static files
 // 1) set Security HTTP headers
 
