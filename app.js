@@ -24,7 +24,7 @@ const viewRouter = require('./routes/viewRoutes');
 const { webhookCheckout } = require('./controllers/bookingController');
 
 const app = express();
-app.enable('trust proxy');
+// app.enable('trust proxy');
 app.use(cors()) // cross origin resource sharing [allow everyone]
 // app.use(cors({origin:'https://www.natours.com'})) [only allow usin this domain]
 // simple reqs => get , post
