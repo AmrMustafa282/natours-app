@@ -13,7 +13,7 @@ const signToken = (id) => {
   });
 };
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = (user, statusCode,red, res) => {
   const token = signToken(user._id);
 
   // remove the password from the output but wont save it to the document
@@ -23,8 +23,9 @@ const createSendToken = (user, statusCode, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
     httpOnly: true, // cookie can NOT be accessed or modired anyway by the browser
+    secure: req.secure || req.headers('x-forwarded-proto')==='https' // set secure on secure connection of in heroku by headers
   };
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  // if (req.secure || req.headers('x-forwarded-proto')==='https') cookieOptions.secure = true;
 
   res.cookie('jwt', token, cookieOptions);
   res.status(statusCode).json({
@@ -94,7 +95,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   //   // other options as needed (e.g., maxAge, domain, path)
   // });
 
-  createSendToken(newUser, 201, res);
+  createSendToken(newUser, 201,req, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -113,7 +114,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // 3) if everything is fine , send token to client
 
-  createSendToken(user, 200, res);
+  createSendToken(user, 200,req, res);
 });
 
 exports.logout = (req, res) => {
@@ -274,7 +275,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   // we did this step in userModel by useing document middelware [pre]
 
   // 4) Log the user in, sent JWT
-  createSendToken(user, 200, res);
+  createSendToken(user, 200,req, res);
 });
 
 exports.sendConfirmation = catchAsync(async (req, res, next) => {
@@ -361,5 +362,5 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   user.passwordConfirm = req.body.passwordConfirm;
   await user.save();
   // 4) Log user in , sent JWT
-  createSendToken(user, 200, res);
+  createSendToken(user, 200,req, res);
 });
