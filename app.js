@@ -21,6 +21,7 @@ const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
 const viewRouter = require('./routes/viewRoutes');
+const { webhookCheckout } = require('./controllers/bookingController');
 
 const app = express();
 app.enable('trust proxy');
@@ -55,6 +56,13 @@ app.use('/api', limiter);
 
 // Middleware
 // Builtin Middleware
+
+// Stripe webhook route
+app.use(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  webhookCheckout); // we want it not in json but in a row formate
+
 
 app.use(express.json({ limit: '10kb' })); // Body parser, reading data from body into req.body
 
@@ -100,6 +108,8 @@ app.use(compression())
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+
 
 // Template Routes
 app.use('/', viewRouter);
