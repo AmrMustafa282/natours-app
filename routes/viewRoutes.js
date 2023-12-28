@@ -10,10 +10,13 @@ const {
   getAccount,
   updateUserData,
   getMyTours,
+  alerts,
 } = require('./../controllers/viewController');
 
 const {createBookingCheckout} = require('./../controllers/bookingController')
 // router.use(isLoggedIn);
+
+router.use(alerts);
 
 // router.get('/',createBookingCheckout, isLoggedIn,getOverview);
 router.get('/', isLoggedIn,getOverview);
