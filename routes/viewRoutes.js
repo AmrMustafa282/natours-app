@@ -7,13 +7,16 @@ const {
   getOverview,
   getTour,
   getLoginForm,
+  getSignupForm,
+  getForgotPasswordForm,
+  getResetPassowrdForm,
   getAccount,
   updateUserData,
   getMyTours,
   alerts,
 } = require('./../controllers/viewController');
 
-const {createBookingCheckout} = require('./../controllers/bookingController')
+// const {createBookingCheckout} = require('./../controllers/bookingController')
 // router.use(isLoggedIn);
 
 router.use(alerts);
@@ -22,6 +25,9 @@ router.use(alerts);
 router.get('/', isLoggedIn,getOverview);
 router.get('/tour/:slug', isLoggedIn,getTour);
 router.get('/auth/login',isLoggedIn, getLoginForm);
+router.get('/auth/signup',isLoggedIn, getSignupForm);
+router.get('/auth/forgot-password', isLoggedIn, getForgotPasswordForm);
+router.get('/auth/reset-password', isLoggedIn, getResetPassowrdForm);
 router.get('/me', protect, getAccount);
 router.get('/my-tours', protect, getMyTours);
 

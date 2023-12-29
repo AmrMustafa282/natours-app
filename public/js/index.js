@@ -22,6 +22,73 @@ const login = async (email, password) => {
   }
 };
 
+const signup = async (name,email,password, passwordConfirm) => {
+  try {
+    const res = await axios({
+      method: 'POST',
+      url: '/api/v1/users/signup',
+      data: {
+        name,
+        email,
+        password,
+        passwordConfirm
+      },
+    });
+    // console.log(res);
+    if (res.data.status === 'success') {
+      showAlert('success', 'Registed Successfully');
+      window.setTimeout(() => {
+        location.assign('/auth/login');
+      }, 1500);
+    }
+  } catch (e) {
+    showAlert('error', e.response.data.message);
+  }
+};
+
+const forgotPassowrd = async (email) => {
+  try {
+    const res = await axios({
+      method: 'POST',
+      url: '/api/v1/users/forgotPassword',
+      data: {
+        email,
+      },
+    });
+    // console.log(res);
+    if (res.data.status === 'success') {
+      showAlert('success', 'Token sent to you Email, Please chack you Email.');
+      window.setTimeout(() => {
+        location.assign('/auth/login');
+      }, 1500);
+    }
+  } catch (e) {
+    showAlert('error', e.response.data.message);
+  }
+}
+
+const resetPassowrd = async (password, passwordConfirm,token) => {
+  try {
+    const res = await axios({
+      method: 'PATCH',
+      url: `/api/v1/users/resetPassword/${token}`,
+      data: {
+        password,
+        passwordConfirm
+      },
+    });
+    console.log(res);
+    if (res.status === 200 || res.data.status === 'success') {
+      showAlert('success', 'Password Rest Successfully.');
+      window.setTimeout(() => {
+        location.assign('/auth/login');
+      }, 1500);
+    }
+  } catch (e) {
+    showAlert('error', e.response.data.message);
+  }
+};
+
 const logout = async () => {
   try {
     const res = await axios({
@@ -97,8 +164,45 @@ if (loginForm) {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-
     login(email, password);
+  });
+}
+
+const signupForm = document.querySelector('.form--signup');
+if (signupForm) {
+  signupForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('passwordConfirm').value;
+
+    signup(name,email, password,passwordConfirm);
+  });
+}
+const forgotPassowrdForm = document.querySelector('.form--forgotPassword');
+if (forgotPassowrdForm) {
+  forgotPassowrdForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+ 
+    forgotPassowrd(email);
+  });
+}
+
+const resetPasswordForm = document.querySelector('.form--resetPassword');
+if(resetPasswordForm) {
+  resetPasswordForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('passwordConfirm').value;
+    // const token = document.querySelector('main').dataset.alert;
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('url'); // Assuming the parameter name is 'url'
+    // console.log(token);
+    if (password !== passwordConfirm)
+      showAlert('error', 'Password did not match');
+    else resetPassowrd(password, passwordConfirm, token);
   });
 }
 
@@ -106,6 +210,8 @@ const logoutBtn = document.querySelector('.nav__el--logout');
 if (logoutBtn) {
   logoutBtn.addEventListener('click', logout);
 }
+
+
 
 const userDataForm = document.querySelector('.form-user-data');
 if (userDataForm) {

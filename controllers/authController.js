@@ -179,10 +179,12 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   // 3) Send it to user's email
   try {
-    const resetURL = `${req.protocol}://${req.get(
-      'host'
-    )}/api/v1/users/resetPassword/${resetToken}`;
-    await new Email(user, resetURL).sendPasswordReset();
+    // const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+    const resetURL = {
+      url: `${req.protocol}://${req.get('host')}/auth/reset-password/`,
+      token:resetToken
+    }
+    await new Email(user, resetURL).sendPasswordRest();
 
     res.status(200).json({
       status: 'success',
@@ -224,7 +226,11 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   // 3) Update changedPasswordAt property for the user
   // 4) Log the user in, send JWT
-  createSendToken(user, 200, req, res);
+  // createSendToken(user, 200, req, res);
+ res.status(200).json({
+     status: 'success'
+ });
+  
 });
 
 exports.sendConfirmation = catchAsync(async (req, res, next) => {
