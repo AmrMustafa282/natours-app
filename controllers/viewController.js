@@ -108,6 +108,7 @@ exports.getAccount = (req, res) => {
     )
     .render('account', {
       title: 'Your account',
+      // hostUrl:`${req.protocol}://${req.get('host')}/`,
     });
 };
 

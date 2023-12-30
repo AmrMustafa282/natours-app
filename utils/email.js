@@ -68,6 +68,12 @@ module.exports = class Email {
       'Your password rest token (valid for only 10 mins)'
     );
   }
+  async sendAccountConfirmation() {
+    await this.send(
+      'accountConfirm',
+      'Your Confirmation token (valid for only 10 mins)'
+    );
+  }
 };
 
 // const sendEmail = async options => {

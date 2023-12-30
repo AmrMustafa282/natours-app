@@ -26,14 +26,16 @@ const createSendToken = (user, statusCode, req, res) => {
 
   // Remove password from output
   user.password = undefined;
-
-  res.status(statusCode).json({
-    status: 'success',
-    token,
-    data: {
-      user,
-    },
-  });
+  // if (!temp) {
+    res.status(statusCode).json({
+      status: 'success',
+      token,
+      data: {
+        user,
+      },
+    });
+  // }
+  
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
@@ -182,8 +184,8 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     // const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
     const resetURL = {
       url: `${req.protocol}://${req.get('host')}/auth/reset-password/`,
-      token:resetToken
-    }
+      token: resetToken,
+    };
     await new Email(user, resetURL).sendPasswordRest();
 
     res.status(200).json({
@@ -227,10 +229,9 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   // 3) Update changedPasswordAt property for the user
   // 4) Log the user in, send JWT
   // createSendToken(user, 200, req, res);
- res.status(200).json({
-     status: 'success'
- });
-  
+  res.status(200).json({
+    status: 'success',
+  });
 });
 
 exports.sendConfirmation = catchAsync(async (req, res, next) => {
@@ -247,18 +248,15 @@ exports.sendConfirmation = catchAsync(async (req, res, next) => {
   const confirmToken = user.createEmailConfirmToken();
   await user.save({ validateBeforeSave: false });
   // 3) Send it to user's email
-  const confirmURL = `${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/users/sendConfirmation/${confirmToken}`;
+  const URL = {
+    url: `${req.protocol}://${req.get('host')}/api/v1/users/confirmEmail/${confirmToken}`,
+    host:`${req.protocol}://${req.get('host')}`
+};
 
-  const message = `Confirm your email? Submit a POST request to: ${confirmURL}`;
+
+  // const message = `Confirm your email? Submit a POST request to: ${confirmURL}`;
   try {
-    // await sendEmail({
-    //   email: user.email,
-    //   subject: 'Your confirmation token (valid for 10 min)',
-    //   message,
-    // });
-
+    await new Email(user, URL).sendAccountConfirmation();
     res.status(200).json({
       status: 'success',
       massage: 'Token sent to email!',
@@ -295,13 +293,10 @@ exports.confirmEmail = catchAsync(async (req, res, next) => {
   user.isConfirmed = true;
   user.emailConfirmToken = undefined;
   user.emailConfirmExpires = undefined;
-  await user.save();
-  res.status(200).json({
-    status: 'success',
-    data: {
-      user,
-    },
-  });
+  await user.save({ validateBeforeSave: false });
+  // createSendToken(user, 200, req, res, 'account');
+  res.redirect('/me');
+
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
@@ -322,6 +317,3 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // 4) Log user in, send JWT
   createSendToken(user, 200, req, res);
 });
-
-
-

@@ -89,6 +89,39 @@ const resetPassowrd = async (password, passwordConfirm,token) => {
   }
 };
 
+const sendConfirmationToEmail = async () => {
+    try {
+      const res = await axios({
+        method: 'POST',
+        url: `/api/v1/users/sendConfirmation`,
+      });
+      // console.log(res);
+      if (res.status === 200 || res.data.status === 'success') {
+        showAlert('success', 'Confimation Sent To Your Email Successfully.');
+      }
+    } catch (e) {
+      showAlert('error', e.response.data.message);
+    }
+}
+
+// const accountConfirmation = async (url) => {
+//   try {
+//     const res = await axios({
+//       method: 'POST',
+//       url
+//     });
+//     // console.log(res);
+//     if (res.status === 200 || res.data.status === 'success') {
+//       showAlert('success', 'Confimation Sent To Your Email Successfully.');
+//       // window.setTimeout(() => {
+//       //   location.assign(host);
+//       // }, 1500);
+//     }
+//   } catch (e) {
+//     showAlert('error', e.response.data.message);
+//   }
+// }
+
 const logout = async () => {
   try {
     const res = await axios({
@@ -206,6 +239,20 @@ if(resetPasswordForm) {
   });
 }
 
+const sendConfirmation = document.getElementById('sendConfirmation');
+if (sendConfirmation) {
+  sendConfirmation.onclick = sendConfirmationToEmail;
+}
+
+// const confirmAccount = document.getElementById('confirmAccount');
+// if (confirmAccount) {
+//   const url = confirmAccount.dataset.url;
+//   // const host = confirmAccount.dataset('host');
+//   // console.log(url);
+//   // console.log(host);
+//   confirmAccount.onclick = accountConfirmation(url);
+// }
+
 const logoutBtn = document.querySelector('.nav__el--logout');
 if (logoutBtn) {
   logoutBtn.addEventListener('click', logout);
@@ -255,3 +302,4 @@ if (bookBtn) {
 
 const alertMessage = document.querySelector('body').dataset.alert;
 if (alertMessage) showAlert('success', alertMessage, 20000);
+

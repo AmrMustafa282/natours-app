@@ -46,6 +46,9 @@ block content
               input.form__upload(type='file', accept='image/*', id='photo', name='photo')
               label(for='photo') Choose new photo
             .form__group.right
+              - if(!user.isConfirmed)
+                a#sendConfirmation.btn.btn--small.btn--green Confirm Your Account
+            .form__group.right
               button.btn.btn--small.btn--green Save settings
               
         .line &nbsp;

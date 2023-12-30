@@ -36,7 +36,7 @@ router.post('/forgotPassword', forgotPassword);
 router.patch('/resetPassword/:token', resetPassword);
 
 router.post('/sendConfirmation', protect,sendConfirmation); // user = req.user from protect works as document so it deals with the instance methods
-router.patch('/confirmEmail/:token', confirmEmail);
+router.get('/confirmEmail/:token', confirmEmail);
 
 
 // this is gonna work as a Middelware so, anything after this is gonne be protected
