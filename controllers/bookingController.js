@@ -4,6 +4,7 @@ const User = require('../models/userModel');
 const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
+const AppError = require('../utils/appError');
 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Get the currently booked tour
@@ -37,17 +38,29 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   });
 
   // 3) Create session as response
-  res.status(200).json({
+  if (!req.user.isConfirmed) {
+  //  return res.status(403).json({
+  //    status: 'error',
+  //    message: 'Please confirm your account before booking.',
+    //  });
+    return next(
+      new AppError('Please confirm your account before booking! check your profile.', 400)
+    );
+  } 
+     res.status(200).json({
     status: 'success',
     session,
   });
+  
+ 
 });
 
 const createBookingCheckout = async (session) => {
   const tour = session.client_reference_id;
   const user = (await User.findOne({ email: session.customer_email })).id;
   const price = session.amount_total / 100;
-  await Booking.create({ tour, user, price });
+    await Booking.create({ tour, user, price });
+  
 };
 
 exports.webhookCheckout = (req, res, next) => {

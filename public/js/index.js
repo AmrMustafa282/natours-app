@@ -172,7 +172,12 @@ const bookTour = async (tourId) => {
     });
   } catch (err) {
     // console.log(err);
-    showAlert('error', err);
+    showAlert(
+      'error',
+      // 'Plaese Confirm your account first to book a tour! check your profile.' // fixed error
+      err.response.data.message ? err.response.data.message:err
+    );
+
   }
   // 2) Create checkout form + charge cridit card
 };
