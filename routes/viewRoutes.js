@@ -30,6 +30,7 @@ router.get('/auth/forgot-password', isLoggedIn, getForgotPasswordForm);
 router.get('/auth/reset-password', isLoggedIn, getResetPassowrdForm);
 router.get('/me', protect, getAccount);
 router.get('/my-tours', protect, getMyTours);
+// router.get('/my-tours', protect, getMyTours);
 
 router.post('/submit-user-data', protect ,updateUserData)
 

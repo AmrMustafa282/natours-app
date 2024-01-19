@@ -13,20 +13,21 @@ const signToken = (id) => {
   });
 };
 
-const createSendToken = (user, statusCode, req, res) => {
-  const token = signToken(user._id);
+const createSendToken = (user,statusCode,req, res) => {
 
-  res.cookie('jwt', token, {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-    ),
-    httpOnly: true,
-    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
-  });
+    const token = signToken(user._id);
+    res.cookie('jwt', token, {
+      expires: new Date(
+        Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+      ),
+      httpOnly: true,
+      secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+    });
+  
 
   // Remove password from output
   user.password = undefined;
-  // if (!temp) {
+
     res.status(statusCode).json({
       status: 'success',
       token,
@@ -34,8 +35,6 @@ const createSendToken = (user, statusCode, req, res) => {
         user,
       },
     });
-  // }
-  
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
@@ -50,7 +49,14 @@ exports.signup = catchAsync(async (req, res, next) => {
   // console.log(url);
   await new Email(newUser, url).sendWelcome();
 
-  createSendToken(newUser, 201, req, res);
+  // createSendToken(newUser, 201, req, res);
+  res.status(200).json({
+    status: 'success',
+    data: {
+      newUser,
+    },
+  });
+
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -249,10 +255,11 @@ exports.sendConfirmation = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
   // 3) Send it to user's email
   const URL = {
-    url: `${req.protocol}://${req.get('host')}/api/v1/users/confirmEmail/${confirmToken}`,
-    host:`${req.protocol}://${req.get('host')}`
-};
-
+    url: `${req.protocol}://${req.get(
+      'host'
+    )}/api/v1/users/confirmEmail/${confirmToken}`,
+    host: `${req.protocol}://${req.get('host')}`,
+  };
 
   // const message = `Confirm your email? Submit a POST request to: ${confirmURL}`;
   try {
@@ -296,7 +303,6 @@ exports.confirmEmail = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
   // createSendToken(user, 200, req, res, 'account');
   res.redirect('/me');
-
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {

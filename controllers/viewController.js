@@ -112,15 +112,36 @@ exports.getAccount = (req, res) => {
     });
 };
 
+// exports.getMyBookings = catchAsync(async (req, res, next) => {
+//   // 1) Find all bookings for the current logged in user
+//   const bookings = await Booking.find({
+//     user:req.user.id
+//   })
+
+//   // 2) Find tours with the returned IDs [array]
+//   const tourIDs = bookings.map(el => el.tour);
+//   const tours = await Tour.find({_id: {$in: tourIDs}})
+//   res
+//     .status(200)
+//     .set(
+//       'Content-Security-Policy',
+//       "default-src 'self' https://*.mapbox.com https://*.stripe.com ;base-uri 'self';block-all-mixed-content;font-src 'self' https: data:;frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src https://cdnjs.cloudflare.com https://api.mapbox.com https://js.stripe.com/v3/ 'self' blob: ;script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests;"
+//     )
+//     .render('overview', {
+//       title: 'My Tours',
+//       tours,
+//     });
+// })
+
 exports.getMyTours = catchAsync(async (req, res, next) => {
   // 1) Find all bookings for the current logged in user
   const bookings = await Booking.find({
-    user:req.user.id
-  })
+    user: req.user.id,
+  });
 
   // 2) Find tours with the returned IDs [array]
-  const tourIDs = bookings.map(el => el.tour);
-  const tours = await Tour.find({_id: {$in: tourIDs}})
+  const tourIDs = bookings.map((el) => el.tour);
+  const tours = await Tour.find({ _id: { $in: tourIDs } });
   res
     .status(200)
     .set(
@@ -131,7 +152,7 @@ exports.getMyTours = catchAsync(async (req, res, next) => {
       title: 'My Tours',
       tours,
     });
-})
+});
 
 exports.updateUserData = catchAsync(async (req, res, next) => {
   const updatedUser = await User.findByIdAndUpdate(
